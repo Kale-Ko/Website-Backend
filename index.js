@@ -6,6 +6,9 @@ OkHeaders.set("Access-Control-Allow-Origin", "*")
 var InvalidHeaders = new Headers()
 InvalidHeaders.set("Content-Type", "text/plain")
 InvalidHeaders.set("Access-Control-Allow-Origin", "*")
+var HelpHeaders = new Headers()
+HelpHeaders.set("Content-Type", "text/html")
+HelpHeaders.set("Access-Control-Allow-Origin", "*")
 
 async function handelRequest(req) {
     var url = new URL(req.url)
@@ -50,8 +53,23 @@ async function handelRequest(req) {
                 return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
             } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
         } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
-    } else if (version == undefined || version == "" || version == " ") return new Response("400 You must specify an api version", { status: 400, statusText: "You must specify an api version", headers: InvalidHeaders })
+    } else if (version == undefined || version == "" || version == " ") return new Response(buildHelpPage(), { status: 200, statusText: "Ok", headers: HelpHeaders })
     else return new Response("400 Invalid api version", { status: 400, statusText: "Invalid api version", headers: InvalidHeaders })
+}
+
+function buildHelpPage() {
+    return `<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <title>Kale Ko - Api - Help</title>
+</head>
+
+<body>
+    <p>You must specify an api version to use this (eg v1)</p>
+</body>
+
+</html>`
 }
 
 addEventListener("fetch", event => {
