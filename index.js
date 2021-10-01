@@ -18,7 +18,7 @@ async function handelRequest(req) {
                 var repos = []
 
                 for (var user in CONFIG.GITHUB_USERS) {
-                    await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERS[user] + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token " + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
+                    await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERS[user] + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
                         data.forEach(repo => {
                             if (repo.stargazers_count > 0 && !repo.private) {
                                 repo.url = repo.html_url
