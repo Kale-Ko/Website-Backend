@@ -1,0 +1,12 @@
+name = "website-api"
+type = "javascript"
+
+account_id = "87867b42ad45c72b767a3fae88fb33fa"
+
+workers_dev = false
+zone_id = "2a36842a31ad183f908d745513801ffc"
+routes = ["api.kaleko.ga/*"]
+
+[vars]
+GITHUB_USERS = "[ 'Kale-Ko', 'Kale-Bot' ]"
+GITHUB_API_TOKEN = "HVGVoRf9ET7NTuRGILvZcwWTw89cuE2EErlr"
