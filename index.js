@@ -32,7 +32,7 @@ async function handelRequest(req) {
                     })
                 }
 
-                repos.sort((a, b) => (a.firstname < b.firstname ? -1 : (a.firstname > b.firstname ? 1 : 0)))
+                repos.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
                 repos.sort((a, b) => (a.archived == b.archived) ? 0 : (a.archived ? 1 : -1))
 
                 return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
@@ -45,7 +45,7 @@ async function handelRequest(req) {
                     })
                 }
 
-                repos.sort((a, b) => (a.firstname < b.firstname ? -1 : (a.firstname > b.firstname ? 1 : 0)))
+                repos.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
 
                 return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
             } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
