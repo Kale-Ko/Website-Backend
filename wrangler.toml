@@ -7,5 +7,5 @@ zone_id = "2a36842a31ad183f908d745513801ffc"
 routes = ["api.kaleko.ga/*"]
 
 [vars]
-GITHUB_USERS = "[ 'Kale-Ko', 'Kale-Bot' ]"
+GITHUB_USERNAME = "Kale-Ko"
 GITHUB_API_TOKEN = "HVGVoRf9ET7NTuRGILvZcwWTw89cuE2EErlr"
