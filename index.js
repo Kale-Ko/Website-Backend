@@ -1,3 +1,5 @@
+import HTMLParser from "./HTMLParser.js"
+
 const CONFIG = { GITHUB_USERNAME, GITHUB_API_TOKEN }
 
 var OkHeaders = new Headers()
@@ -69,24 +71,22 @@ async function handelRequest(req) {
 
                 return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
             } else if (endpoint[1] == "showcase") {
-                var showcases = []
+                var pins = []
 
-                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
-                    data.forEach(repo => {
-                        if (repo.stargazers_count > 0 && !repo.archived && !repo.private) {
-                            repo.url = repo.html_url
+                await fetch("https://github.com/" + CONFIG.GITHUB_USERNAME).then(res => res.text()).then(data => {
+                    new HTMLParser.Parser(new HTMLParser.HtmlBuilder((error, dom) => {
+                        if (error) throw error
+                        else {
+                            console.log(dom)
 
-                            var todelete = ["id", "node_id", "private", "owner", "fork", "html_url", "forks_url", "keys_url", "collaborators_url", "teams_url", "hooks_url", "issue_events_url", "events_url", "assignees_url", "branches_url", "tags_url", "blobs_url", "git_tags_url", "git_refs_url", "trees_url", "statuses_url", "languages_url", "stargazers_url", "contributors_url", "subscribers_url", "subscription_url", "commits_url", "git_commits_url", "comments_url", "issue_comment_url", "contents_url", "compare_url", "merges_url", "archive_url", "downloads_url", "issues_url", "pulls_url", "milestones_url", "notifications_url", "labels_url", "releases_url", "deployments_url", "pushed_at", "git_url", "ssh_url", "clone_url", "svn_url", "size", "has_issues", "has_projects", "has_downloads", "has_wiki", "has_pages", "forks_count", "mirror_url", "open_issues_count", "license", "allow_forking", "forks", "open_issues", "watchers", "default_branch", "permissions", "language", "disabled", "created_at"]
-                            todelete.forEach(item => { delete repo[item] })
-
-                            showcases.push(repo)
+                            pins = dom
                         }
-                    })
+                    }, { verbose: false, enforceEmptyTags: false })).parseComplete(data)
                 })
 
-                showcases.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
+                // "ol.js-pinned-items-reorder-list > li > div > div > div > a"
 
-                return new Response(JSON.stringify(showcases, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                return new Response(JSON.stringify(pins, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
             } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
         } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
     } else if (version == undefined || version == "" || version == " ") return new Response("An api version must be specified", { status: 400, statusText: "An api version must be specified", headers: InvalidHeaders })
