@@ -38,6 +38,13 @@ async function handelRequest(req) {
                 await fetch("https://raw.githubusercontent.com/" + CONFIG.GITHUB_USERNAME + "/" + CONFIG.GITHUB_USERNAME + "/master/README.md", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(data => { readme = data })
 
                 return new Response(readme, { status: 200, statusText: "Ok", headers: OkHeaders })
+                /* } else if (endpoint[1] == "readme-text") {
+                    var readme = ""
+    
+                    await fetch("https://raw.githubusercontent.com/" + CONFIG.GITHUB_USERNAME + "/" + CONFIG.GITHUB_USERNAME + "/master/README.md", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(data => { readme = data })
+    
+                    return new Response(readme, { status: 200, statusText: "Ok", headers: OkHeaders })
+                */
             } else if (endpoint[1] == "projects") {
                 var repos = []
 
@@ -85,7 +92,18 @@ async function handelRequest(req) {
                 })
 
                 repos.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
-                repos.sort((a, b) => (a.archived == b.archived) ? 0 : (a.archived ? 1 : -1))
+
+                return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+            } else if (endpoint[1] == "showcase-raw") {
+                var repos = []
+
+                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
+                    data.forEach(repo => {
+                        if (repo.stargazers_count > 0 && !repo.archived && !repo.private) repos.push(repo)
+                    })
+                })
+
+                repos.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
 
                 return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
             } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
