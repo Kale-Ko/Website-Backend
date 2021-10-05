@@ -71,7 +71,7 @@ async function handelRequest(req) {
             } else if (endpoint[1] == "showcase") {
                 var showcase = []
 
-                await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(data => {
+                await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(async data => {
                     data = JSON.parse(data)
 
                     var pinned = []
@@ -95,7 +95,7 @@ async function handelRequest(req) {
             } else if (endpoint[1] == "showcase-raw") {
                 var showcase = []
 
-                await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(data => {
+                await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(async data => {
                     data = JSON.parse(data)
 
                     var pinned = []
