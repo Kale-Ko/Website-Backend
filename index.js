@@ -72,7 +72,7 @@ async function handelRequest(req) {
                 var showcase = []
 
                 await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(async data => {
-                    data = JSON.parse(data)
+                    data = JSON.parse(data).data
 
                     var pinned = []
                     data.user.pinnedItems.nodes.forEach(item => { pinned.push(item.name) })
@@ -96,13 +96,15 @@ async function handelRequest(req) {
                 var showcase = []
 
                 await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(async data => {
-                    data = JSON.parse(data)
+                    data = JSON.parse(data).data
 
                     var pinned = []
                     data.user.pinnedItems.nodes.forEach(item => { pinned.push(item.name) })
 
                     await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
-                        data.forEach(repo => { if (pinned.includes(repo.name) && !repo.private) repos.push(repo) })
+                        data.forEach(repo => {
+                            if (pinned.includes(repo.name) && !repo.private) showcase.push(repo)
+                        })
                     })
                 })
 
