@@ -17,7 +17,7 @@ async function handelRequest(req) {
             if (endpoint[1] == "profile") {
                 var response = {}
 
-                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME, { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => { response = data })
+                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME, { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => { response = data })
 
                 response.url = response.html_url
                 response.homepage = response.blog
@@ -29,19 +29,19 @@ async function handelRequest(req) {
             } else if (endpoint[1] == "profile-raw") {
                 var response = {}
 
-                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME, { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => { response = data })
+                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME, { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => { response = data })
 
                 return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
             } else if (endpoint[1] == "readme") {
                 var readme = ""
 
-                await fetch("https://raw.githubusercontent.com/" + CONFIG.GITHUB_USERNAME + "/" + CONFIG.GITHUB_USERNAME + "/master/README.md", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(data => { readme = data })
+                await fetch("https://raw.githubusercontent.com/" + CONFIG.GITHUB_USERNAME + "/" + CONFIG.GITHUB_USERNAME + "/master/README.md", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(data => { readme = data })
 
                 return new Response(readme, { status: 200, statusText: "Ok", headers: OkHeaders })
             } else if (endpoint[1] == "projects") {
                 var repos = []
 
-                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
+                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
                     data.forEach(repo => {
                         if (repo.stargazers_count > 0 && !repo.private) {
                             repo.url = repo.html_url
@@ -61,7 +61,7 @@ async function handelRequest(req) {
             } else if (endpoint[1] == "projects-raw") {
                 var repos = []
 
-                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
+                await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
                     data.forEach(repo => { if (repo.stargazers_count > 0 && !repo.private) repos.push(repo) })
                 })
 
@@ -71,13 +71,13 @@ async function handelRequest(req) {
             } else if (endpoint[1] == "showcase") {
                 var showcase = []
 
-                await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(async data => {
+                await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(async data => {
                     data = JSON.parse(data).data
 
                     var pinned = []
                     data.user.pinnedItems.nodes.forEach(item => { pinned.push(item.name) })
 
-                    await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
+                    await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
                         data.forEach(repo => {
                             if (pinned.includes(repo.name) && !repo.private) {
                                 repo.url = repo.html_url
@@ -95,13 +95,13 @@ async function handelRequest(req) {
             } else if (endpoint[1] == "showcase-raw") {
                 var showcase = []
 
-                await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(async data => {
+                await fetch("https://api.github.com/graphql", { method: "POST", body: JSON.stringify({ query: `query { user(login:"${CONFIG.GITHUB_USERNAME}") { pinnedItems(last:6) { nodes { ... on Repository { name } } } } }` }), headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(async data => {
                     data = JSON.parse(data).data
 
                     var pinned = []
                     data.user.pinnedItems.nodes.forEach(item => { pinned.push(item.name) })
 
-                    await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
+                    await fetch("https://api.github.com/users/" + CONFIG.GITHUB_USERNAME + "/repos?per_page=100", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.json()).then(data => {
                         data.forEach(repo => {
                             if (pinned.includes(repo.name) && !repo.private) showcase[pinned.indexOf(repo.name)] = repo
                         })

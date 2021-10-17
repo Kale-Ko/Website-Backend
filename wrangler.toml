@@ -9,4 +9,4 @@ routes = ["api.kaleko.ga/*"]
 
 [vars]
 GITHUB_USERNAME = "Kale-Ko"
-GITHUB_API_TOKEN = "HVGVoRf9ET7NTuRGILvZcwWTw89cuE2EErlr"
+GITHUB_API_TOKEN = "DmRrnJzXaldVAsFzROrSlMQw0Hmjco13vUw8"
