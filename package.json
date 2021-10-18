@@ -1,5 +1,8 @@
 {
     "name": "website-api",
     "version": "1.0.0",
-    "main": "index.js"
+    "main": "index.js",
+    "devDependencies": {
+        "webpack": "^5.58.2"
+    }
 }

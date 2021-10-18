@@ -1,5 +1,6 @@
 name = "website-api"
-type = "javascript"
+type = "webpack"
+webpack_config = "webpack.config.js"
 compatibility_date = "2021-10-01"
 
 account_id = "87867b42ad45c72b767a3fae88fb33fa"
