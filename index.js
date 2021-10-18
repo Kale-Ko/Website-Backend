@@ -200,7 +200,7 @@ async function handelRequest(req) {
                         readme = markedIt.parse(data)
                     })
 
-                    return new Response(readme, { status: 200, statusText: "Ok", headers: OkHeaders })
+                    return new Response(JSON.stringify(readme, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
                 } else if (endpoint[1] == "text") {
                     var readme = ""
 
