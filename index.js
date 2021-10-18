@@ -201,7 +201,7 @@ async function handelRequest(req) {
                     })
 
                     return new Response(JSON.stringify(readme, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
-                } else if (endpoint[1] == "text") {
+                } else if (endpoint[2] == "text") {
                     var readme = ""
 
                     await fetch("https://raw.githubusercontent.com/" + CONFIG.GITHUB_USERNAME + "/" + CONFIG.GITHUB_USERNAME + "/master/README.md", { headers: { "User-Agent": "Mozilla/5.0 Cloudflare/Workers", "Authorization": "token ghp_" + CONFIG.GITHUB_API_TOKEN } }).then(res => res.text()).then(data => {
