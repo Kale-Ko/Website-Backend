@@ -301,7 +301,7 @@ async function handelRequest(req) {
                 } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
             } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
         } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
-    } else if (version == undefined || version == "") return new Response("Welcome to the api, try sending a request (eg GET https://api.kaleko.ga/v2/profile/json/)", { status: 200, statusText: "Ok", headers: HtmlHeaders })
+    } else if (version == undefined || version == "") return new Response("Welcome to the api, try sending a request (eg GET https://api.kaleko.ga/v2/github/profile/json/)", { status: 200, statusText: "Ok", headers: HtmlHeaders })
     else return new Response("400 Invalid api version", { status: 400, statusText: "Invalid api version", headers: InvalidHeaders })
 }
 
