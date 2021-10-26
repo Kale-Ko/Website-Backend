@@ -1,16 +1,16 @@
-const markedIt = require("./marked-it.js")()
+const markedIt = require("./lib/marked-it.js")()
 
 const CONFIG = { GITHUB_USERNAME, GITHUB_API_TOKEN }
 
-var OkHeaders = new Headers()
-OkHeaders.set("Content-Type", "application/json")
-OkHeaders.set("Access-Control-Allow-Origin", "*")
+var JsonHeaders = new Headers()
+JsonHeaders.set("Content-Type", "application/json")
+JsonHeaders.set("Access-Control-Allow-Origin", "*")
+var TextHeaders = new Headers()
+TextHeaders.set("Content-Type", "text/plain")
+TextHeaders.set("Access-Control-Allow-Origin", "*")
 var HtmlHeaders = new Headers()
 HtmlHeaders.set("Content-Type", "text/html")
 HtmlHeaders.set("Access-Control-Allow-Origin", "*")
-var InvalidHeaders = new Headers()
-InvalidHeaders.set("Content-Type", "text/plain")
-InvalidHeaders.set("Access-Control-Allow-Origin", "*")
 
 async function handelRequest(req) {
     var url = new URL(req.url)
@@ -34,7 +34,7 @@ async function handelRequest(req) {
                 var todelete = ["id", "node_id", "html_url", "followers_url", "following_url", "gists_url", "starred_url", "subscriptions_url", "organizations_url", "repos_url", "events_url", "received_events_url", "type", "site_admin", "blog", "company", "hireable", "created_at"]
                 todelete.forEach(item => { delete response[item] })
 
-                return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
             } else if (endpoint[1] == "profile-raw") {
                 var response = {}
 
@@ -44,7 +44,7 @@ async function handelRequest(req) {
                     response = data
                 })
 
-                return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
             } else if (endpoint[1] == "readme") {
                 var readme = ""
 
@@ -64,7 +64,7 @@ async function handelRequest(req) {
                     readme = data
                 })
 
-                return new Response(readme, { status: 200, statusText: "Ok", headers: OkHeaders })
+                return new Response(readme, { status: 200, statusText: "Ok", headers: JsonHeaders })
             } else if (endpoint[1] == "projects") {
                 var repos = []
 
@@ -86,7 +86,7 @@ async function handelRequest(req) {
                 repos.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
                 repos.sort((a, b) => (a.archived == b.archived) ? 0 : (a.archived ? 1 : -1))
 
-                return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
             } else if (endpoint[1] == "projects-raw") {
                 var repos = []
 
@@ -98,7 +98,7 @@ async function handelRequest(req) {
 
                 repos.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
 
-                return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
             } else if (endpoint[1] == "showcase") {
                 var showcase = []
 
@@ -126,7 +126,7 @@ async function handelRequest(req) {
                     })
                 })
 
-                return new Response(JSON.stringify(showcase, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                return new Response(JSON.stringify(showcase, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
             } else if (endpoint[1] == "showcase-raw") {
                 var showcase = []
 
@@ -147,9 +147,9 @@ async function handelRequest(req) {
                     })
                 })
 
-                return new Response(JSON.stringify(showcase, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
-            } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
-        } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
+                return new Response(JSON.stringify(showcase, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
+            } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+        } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
     } else if (version == "v2") {
         if (endpoint[0] == "github") {
             if (endpoint[1] == "profile") {
@@ -168,7 +168,7 @@ async function handelRequest(req) {
                     var todelete = ["id", "node_id", "html_url", "followers_url", "following_url", "gists_url", "starred_url", "subscriptions_url", "organizations_url", "repos_url", "events_url", "received_events_url", "type", "site_admin", "blog", "company", "hireable", "created_at"]
                     todelete.forEach(item => { delete response[item] })
 
-                    return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                    return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
                 } else if (endpoint[2] == "raw-json") {
                     var response = {}
 
@@ -178,8 +178,8 @@ async function handelRequest(req) {
                         response = data
                     })
 
-                    return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
+                    return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
+                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
             } else if (endpoint[1] == "readme") {
                 if (endpoint[2] == "html") {
                     var readme = ""
@@ -200,7 +200,7 @@ async function handelRequest(req) {
                         readme = markedIt.parse(data)
                     })
 
-                    return new Response(JSON.stringify(readme, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                    return new Response(JSON.stringify(readme, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
                 } else if (endpoint[2] == "text") {
                     var readme = ""
 
@@ -210,8 +210,8 @@ async function handelRequest(req) {
                         readme = data
                     })
 
-                    return new Response(readme, { status: 200, statusText: "Ok", headers: OkHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
+                    return new Response(readme, { status: 200, statusText: "Ok", headers: JsonHeaders })
+                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
             } else if (endpoint[1] == "projects") {
                 if (endpoint[2] == "json") {
                     var repos = []
@@ -234,7 +234,7 @@ async function handelRequest(req) {
                     repos.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
                     repos.sort((a, b) => (a.archived == b.archived) ? 0 : (a.archived ? 1 : -1))
 
-                    return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                    return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
                 } else if (endpoint[2] == "raw-json") {
                     var repos = []
 
@@ -246,8 +246,8 @@ async function handelRequest(req) {
 
                     repos.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
 
-                    return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
+                    return new Response(JSON.stringify(repos, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
+                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
             } else if (endpoint[1] == "showcase") {
                 if (endpoint[2] == "json") {
                     var showcase = []
@@ -276,7 +276,7 @@ async function handelRequest(req) {
                         })
                     })
 
-                    return new Response(JSON.stringify(showcase, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
+                    return new Response(JSON.stringify(showcase, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
                 } else if (endpoint[2] == "raw-json") {
                     var showcase = []
 
@@ -297,12 +297,14 @@ async function handelRequest(req) {
                         })
                     })
 
-                    return new Response(JSON.stringify(showcase, null, 2), { status: 200, statusText: "Ok", headers: OkHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
-            } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
-        } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: InvalidHeaders })
+                    return new Response(JSON.stringify(showcase, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
+                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+            } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+        } else if (endpoint[0] == "online") {
+            return new Response("200 Online", { status: 200, statusText: "Online", headers: JsonHeaders })
+        } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
     } else if (version == undefined || version == "") return new Response("Welcome to the api, try sending a request (eg GET https://api.kaleko.ga/v2/github/profile/json/)", { status: 200, statusText: "Ok", headers: HtmlHeaders })
-    else return new Response("400 Invalid api version", { status: 400, statusText: "Invalid api version", headers: InvalidHeaders })
+    else return new Response("400 Invalid api version", { status: 400, statusText: "Invalid api version", headers: TextHeaders })
 }
 
 addEventListener("fetch", event => { event.respondWith(handelRequest(event.request)) })
