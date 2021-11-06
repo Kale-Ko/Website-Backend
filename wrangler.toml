@@ -1,4 +1,4 @@
-name = "website-api"
+name = "kaleko-website-api"
 type = "webpack"
 webpack_config = "webpack.config.js"
 compatibility_date = "2021-10-01"
