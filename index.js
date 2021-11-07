@@ -643,7 +643,7 @@ async function handelRequest(req) {
                             if (project == null || project.title.includes("Private")) return data.splice(data.indexOf(project), 1)
                         })
 
-                        response = []
+                        response = data
                     })
 
                     return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
