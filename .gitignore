@@ -1,0 +1,14 @@
+node_modules
+package-lock.json
+
+build
+out
+target
+
+.vscode
+.classpath
+.project
+.settings
+
+dist
+worker
