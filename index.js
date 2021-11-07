@@ -360,7 +360,7 @@ async function handelRequest(req) {
                         })
 
                         data.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
-                        data.sort((a, b) => a.stargazerCount - b.stargazerCount)
+                        data.sort((a, b) => b.stargazerCount - a.stargazerCount)
                         data.sort((a, b) => (a.isArchived == b.isArchived) ? 0 : (a.isArchived ? 1 : -1))
 
                         response = data
@@ -550,7 +550,7 @@ async function handelRequest(req) {
                         })
 
                         data.sort((a, b) => (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)))
-                        data.sort((a, b) => a.stargazerCount - b.stargazerCount)
+                        data.sort((a, b) => b.stargazerCount - a.stargazerCount)
 
                         response = data
                     })
