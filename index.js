@@ -20,12 +20,11 @@ HtmlHeaders.set("Content-Type", "text/html")
 HtmlHeaders.set("Access-Control-Allow-Origin", "*")
 
 async function handelRequest(req) {
-    var url = new URL(req.url)
+    var url = new URL(req.url.endsWith("/") ? req.url : req.url + "/")
     var version = url.pathname.split("/")[1]
     var endpoint = url.pathname.split("/").slice(2, url.pathname.split("/").length - 1)
 
-    if (version == "help") return new Response("/v4 (Current)\n/v3 (Outdated)\n\n/v2 (Depreciated)\n/v1 (Depreciated)", { status: 200, statusText: "Ok", headers: TextHeaders })
-    else if (version == "v1" || version == "v2") return new Response(version + " has been depreciated, please use a different one", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+    if (version == "v1" || version == "v2") return new Response(version + " has been depreciated, please use a different one", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
     else if (version == "v3") {
         if (endpoint[0] == "github") {
             if (endpoint[1] == "profile") {
@@ -501,10 +500,8 @@ async function handelRequest(req) {
         } else if (endpoint[0] == "online") return new Response("200 Online", { status: 200, statusText: "Online", headers: JsonHeaders })
         else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
     } else if (version == "v4") {
-        if (endpoint[0] == "help") return new Response("/help - Api help page\n/online - Check your connection\n/github - Github endpoints", { status: 200, statusText: "Ok", headers: TextHeaders })
-        else if (endpoint[0] == "github") {
-            if (endpoint[0] == "help") return new Response("/github/help - Github api help page\n/profile\n/readme\n/repositories\n/pins\n/stars\n/gists\n/projects", { status: 200, statusText: "Ok", headers: TextHeaders })
-            else if (endpoint[1] == "profile") {
+        if (endpoint[0] == "github") {
+            if (endpoint[1] == "profile") {
                 if (endpoint[2] == "json") {
                     var response = {}
 
@@ -564,7 +561,7 @@ async function handelRequest(req) {
                     })
 
                     return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: JsonHeaders })
+                } else return new Response("/github/profile/json", { status: 200, statusText: "Ok", headers: TextHeaders })
             } else if (endpoint[1] == "readme") {
                 if (endpoint[2] == "html") {
                     var response = ""
@@ -596,7 +593,7 @@ async function handelRequest(req) {
                     })
 
                     return new Response(response, { status: 200, statusText: "Ok", headers: JsonHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+                } else return new Response("/github/readme/html\n/github/readme/json\n/github/readme/text", { status: 200, statusText: "Ok", headers: TextHeaders })
             } else if (endpoint[1] == "repositories") {
                 if (endpoint[2] == "json") {
                     var response = []
@@ -692,7 +689,7 @@ async function handelRequest(req) {
                     })
 
                     return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+                } else return new Response("/github/repositories/json", { status: 200, statusText: "Ok", headers: TextHeaders })
             } else if (endpoint[1] == "pins") {
                 if (endpoint[2] == "json") {
                     var response = []
@@ -786,7 +783,7 @@ async function handelRequest(req) {
                     })
 
                     return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+                } else return new Response("/github/pins/json", { status: 200, statusText: "Ok", headers: TextHeaders })
             } else if (endpoint[1] == "stars") {
                 if (endpoint[2] == "json") {
                     var response = []
@@ -881,7 +878,7 @@ async function handelRequest(req) {
                     })
 
                     return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+                } else return new Response("/github/stars/json", { status: 200, statusText: "Ok", headers: TextHeaders })
             } else if (endpoint[1] == "gists") {
                 if (endpoint[2] == "json") {
                     var response = {}
@@ -931,7 +928,7 @@ async function handelRequest(req) {
                     })
 
                     return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: JsonHeaders })
+                } else return new Response("/github/gists/json", { status: 200, statusText: "Ok", headers: TextHeaders })
             } else if (endpoint[1] == "projects") {
                 if (endpoint[2] == "json") {
                     var response = {}
@@ -972,12 +969,12 @@ async function handelRequest(req) {
                     })
 
                     return new Response(JSON.stringify(response, null, 2), { status: 200, statusText: "Ok", headers: JsonHeaders })
-                } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: JsonHeaders })
-            } else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+                } else return new Response("/github/projects/json", { status: 200, statusText: "Ok", headers: TextHeaders })
+            } else return new Response("/github/help - Github api help page\n/github/profile\n/github/readme\n/github/repositories\n/github/pins\n/github/stars\n/github/gists\n/github/projects", { status: 200, statusText: "Ok", headers: TextHeaders })
         } else if (endpoint[0] == "online") return new Response("200 Online", { status: 200, statusText: "Online", headers: JsonHeaders })
-        else return new Response("400 Invalid endpoint", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
-    } else if (version == undefined || version == "") return new Response("Welcome to the api, try sending a request (eg GET https://api.kaleko.ga/v3/github/profile/json/)\nIf you need help go to https://api.kaleko.ga/help", { status: 200, statusText: "Ok", headers: TextHeaders })
-    else return new Response("400 Invalid api version", { status: 400, statusText: "Invalid api version", headers: TextHeaders })
+        else return new Response("/help - Api help page\n/online - Check your connection\n/github - Github endpoints", { status: 200, statusText: "Ok", headers: TextHeaders })
+    } else if (version == undefined || version == "") return new Response("Welcome to the api, try sending a request (eg GET https://api.kaleko.ga/v4/github/profile/json/)\nIf you need help go to https://api.kaleko.ga/help/", { status: 200, statusText: "Ok", headers: TextHeaders })
+    else return new Response("/v4 (Current)\n/v3 (Outdated)\n\n/v2 (Depreciated)\n/v1 (Depreciated)", { status: 200, statusText: "Ok", headers: TextHeaders })
 }
 
 addEventListener("fetch", event => { event.respondWith(handelRequest(event.request)) })
