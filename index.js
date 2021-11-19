@@ -25,7 +25,7 @@ async function handelRequest(req) {
     var endpoint = url.pathname.split("/").slice(2, url.pathname.split("/").length - 1)
 
     if (version == "help") return new Response("/v4 (Current)\n/v3 (Outdated)\n\n/v2 (Depreciated)\n/v1 (Depreciated)", { status: 200, statusText: "Ok", headers: TextHeaders })
-    else if (version == "v1" || "v2") return new Response(version + " has been depreciated, please use a different one", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
+    else if (version == "v1" || version == "v2") return new Response(version + " has been depreciated, please use a different one", { status: 400, statusText: "Invalid endpoint", headers: TextHeaders })
     else if (version == "v3") {
         if (endpoint[0] == "github") {
             if (endpoint[1] == "profile") {
