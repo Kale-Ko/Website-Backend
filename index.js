@@ -1,10 +1,3 @@
-/**
-    @license
-    MIT License
-    Copyright (c) 2021 Kale Ko
-    See https://kaleko.ga/license.txt
-*/
-
 const markedIt = require("./lib/marked-it.js")()
 
 const CONFIG = { GITHUB_USERNAME, GITHUB_API_TOKEN }
