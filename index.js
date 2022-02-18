@@ -44,7 +44,7 @@ async function handelRequest(req) {
                                         email,
                                         twitterUsername,
                                         location,
-                                    
+
                                         followers(first:100) {
                                             nodes {
                                                 login,
@@ -59,7 +59,7 @@ async function handelRequest(req) {
                                                 url
                                             }
                                         }, 
-                                    
+
                                         organizations(first:100) {
                                             nodes {
                                                 login,
@@ -242,7 +242,7 @@ async function handelRequest(req) {
                                                     primaryLanguage {
                                                         name
                                                     },
-                                                    
+
                                                     collaborators(first:100) {
                                                         nodes {
                                                             login,
@@ -335,7 +335,7 @@ async function handelRequest(req) {
                                                 primaryLanguage {
                                                     name
                                                 },
-                                                    
+
                                                 collaborators(first:100) {
                                                     nodes {
                                                         login,
@@ -419,7 +419,7 @@ async function handelRequest(req) {
                                                 url
                                                 createdAt,
                                                 description,
-                                                
+
                                                 stargazerCount
                                                 isFork,
                                                 isPublic,
@@ -518,7 +518,7 @@ async function handelRequest(req) {
                                         email,
                                         twitterUsername,
                                         location,
-                                    
+
                                         followers(first:100) {
                                             nodes {
                                                 login,
@@ -533,7 +533,7 @@ async function handelRequest(req) {
                                                 url
                                             }
                                         }, 
-                                    
+
                                         organizations(first:100) {
                                             nodes {
                                                 login,
@@ -716,7 +716,7 @@ async function handelRequest(req) {
                                                     primaryLanguage {
                                                         name
                                                     },
-                                                    
+
                                                     collaborators(first:100) {
                                                         nodes {
                                                             login,
@@ -809,7 +809,7 @@ async function handelRequest(req) {
                                                 primaryLanguage {
                                                     name
                                                 },
-                                                    
+
                                                 collaborators(first:100) {
                                                     nodes {
                                                         login,
@@ -893,7 +893,7 @@ async function handelRequest(req) {
                                                 url
                                                 createdAt,
                                                 description,
-                                                
+
                                                 stargazerCount
                                                 isFork,
                                                 isPublic,
@@ -944,8 +944,10 @@ async function handelRequest(req) {
                                                 },
                                                 url,
                                                 createdAt,
+                                                shortDescription,
                                                 description,
 
+                                                public,
                                                 closed
                                             }
                                         }
@@ -955,7 +957,7 @@ async function handelRequest(req) {
                         data = data.data.user.projectsNext.nodes
 
                         data.forEach(project => {
-                            if (project == null || project.title.includes("Private")) return data.splice(data.indexOf(project), 1)
+                            if (project == null || project.title.includes("Private") || project.closed) return data.splice(data.indexOf(project), 1)
                         })
 
                         response = data
