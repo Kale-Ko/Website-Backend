@@ -58,7 +58,7 @@ async function handelRequest(req) {
                                                 name,
                                                 url
                                             }
-                                        }, 
+                                        },
 
                                         organizations(first:100) {
                                             nodes {
@@ -220,7 +220,7 @@ async function handelRequest(req) {
                                     user(login:"${CONFIG.GITHUB_USERNAME}") {
                                         pinnedItems(first:6) {
                                             nodes {
-                                                ... on Repository {     
+                                                ... on Repository {
                                                     name,
                                                     owner {
                                                         ... on User {
@@ -313,7 +313,7 @@ async function handelRequest(req) {
                                 `query {
                                     user(login:"${CONFIG.GITHUB_USERNAME}") {
                                         starredRepositories(first:100) {
-                                            nodes { 
+                                            nodes {
                                                 name,
                                                 owner {
                                                     ... on User {
@@ -532,7 +532,7 @@ async function handelRequest(req) {
                                                 name,
                                                 url
                                             }
-                                        }, 
+                                        },
 
                                         organizations(first:100) {
                                             nodes {
@@ -694,7 +694,7 @@ async function handelRequest(req) {
                                     user(login:"${CONFIG.GITHUB_USERNAME}") {
                                         pinnedItems(first:6) {
                                             nodes {
-                                                ... on Repository {     
+                                                ... on Repository {
                                                     name,
                                                     owner {
                                                         ... on User {
@@ -787,7 +787,7 @@ async function handelRequest(req) {
                                 `query {
                                     user(login:"${CONFIG.GITHUB_USERNAME}") {
                                         starredRepositories(first:100) {
-                                            nodes { 
+                                            nodes {
                                                 name,
                                                 owner {
                                                     ... on User {
