@@ -1,12 +1,15 @@
 name = "kaleko-website-api"
-type = "webpack"
-webpack_config = "webpack.config.js"
-compatibility_date = "2021-10-01"
+main = "./dist/main.js"
+
+compatibility_date = "2022-06-06"
 
 account_id = "87867b42ad45c72b767a3fae88fb33fa"
 
-zone_id = "2a36842a31ad183f908d745513801ffc"
-routes = ["api.kaleko.ga/*"]
+routes = [{ pattern = "api.kaleko.ga/*", zone_id = "2a36842a31ad183f908d745513801ffc" }]
+workers_dev = false
+
+[build]
+command = "npm run build"
 
 [vars]
 GITHUB_USERNAME = "Kale-Ko"
